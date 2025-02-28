@@ -19,9 +19,28 @@ async function setupServer() {
     }),
   );
 
-  app.get('/contacts', getContacts);
+  app.get('/contacts', async (req, res) => {
+    const contacts = await getContacts();
+    res.status(200).json({
+      data: contacts,
+      message: 'Successfully found contacts!',
+    });
+  });
 
-  app.get('/contacts/:id', getContactById);
+  app.get('/contacts/:contactId', async (req, res, next) => {
+    const { contactId } = req.params;
+    const student = await getContactById(contactId);
+
+    if (!student)
+      return res.status(404).json({
+        message: 'Contact not found',
+      });
+
+    res.status(200).json({
+      data: student,
+      message: `Successfully found contact with id ${contactId}!`,
+    });
+  });
 
   app.use((req, res) => {
     res.status(404).json({ message: 'Not found' });
