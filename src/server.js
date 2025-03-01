@@ -19,28 +19,38 @@ async function setupServer() {
     }),
   );
 
-  app.get('/contacts', async (req, res) => {
-    const data = await getContacts();
+  app.get('/contacts', async (req, res, next) => {
+    try {
+      const contacts = await getContacts();
 
-    res.status(200).json({
-      message: 'Successfully found contacts!',
-      data,
-    });
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully found contacts!',
+        data: contacts,
+      });
+    } catch (error) {
+      next(error);
+    }
   });
 
   app.get('/contacts/:contactId', async (req, res, next) => {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    try {
+      const { contactId } = req.params;
+      const contact = await getContactById(contactId);
 
-    if (!contact)
-      return res.status(404).json({
-        message: 'Contact not found',
+      if (!contact)
+        return res.status(404).json({
+          message: 'Contact not found',
+        });
+
+      res.status(200).json({
+        status: 200,
+        message: `Successfully found contact with id ${contactId}!`,
+        data: contact,
       });
-
-    res.status(200).json({
-      message: `Successfully found contact with id ${contactId}!`,
-      data: contact,
-    });
+    } catch (error) {
+      next(error);
+    }
   });
 
   app.use((req, res) => {
