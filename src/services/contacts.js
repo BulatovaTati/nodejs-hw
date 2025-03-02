@@ -18,21 +18,14 @@ export const deleteContact = async (contactId) => {
   });
 };
 
-export const updateContact = async (contactId, payload, options = {}) => {
-  const rawResult = await ContactsCollection.findOneAndUpdate(
+export const updateContact = async (contactId, payload) => {
+  const result = await ContactsCollection.findOneAndUpdate(
     { _id: contactId },
     payload,
     {
       new: true,
       includeResultMetadata: true,
-      ...options,
     },
   );
-
-  if (!rawResult || !rawResult.value) return null;
-
-  return {
-    student: rawResult.value,
-    isNew: Boolean(rawResult?.lastErrorObject?.upserted),
-  };
+  return result.value;
 };
