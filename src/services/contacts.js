@@ -1,3 +1,5 @@
+import createHttpError from 'http-errors';
+
 import { SORT_ORDER } from '../constants/index.js';
 import { ContactsCollection } from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
@@ -7,11 +9,21 @@ export const getContacts = async ({
   perPage = 10,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
+  filter = {},
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
   const contactQuery = ContactsCollection.find();
+
+  if (filter.isFavourite) {
+    contactQuery.where('isFavourite').equals(filter.isFavourite);
+  }
+
+  if (filter.contactType) {
+    contactQuery.where('contactType').equals(filter.contactType);
+  }
+
   const contactCount = await ContactsCollection.find()
     .merge(contactQuery)
     .countDocuments();
@@ -19,11 +31,7 @@ export const getContacts = async ({
   const totalPages = Math.ceil(contactCount / perPage);
 
   if (page > totalPages) {
-    return {
-      status: 400,
-      message: 'Invalid page number',
-      data: null,
-    };
+    throw createHttpError(400, 'Invalid page number');
   }
 
   const contacts = await contactQuery
