@@ -2,15 +2,15 @@ export const parseIsFavourite = (value) => {
   if (typeof value === 'boolean') return value;
   if (value === 'true') return true;
   if (value === 'false') return false;
-  return null;
 };
 
 export const parseContactType = (type) => {
   if (typeof type !== 'string') return null;
   const validContactTypes = ['work', 'home', 'personal'];
-  const isValidType = validContactTypes.includes(type.toLowerCase());
 
-  return isValidType ? type.toLowerCase() : null;
+  const isValidType = (type) => validContactTypes.includes(type.toLowerCase());
+
+  if (isValidType(type)) return type;
 };
 
 export const parseFilterParams = (query) => {

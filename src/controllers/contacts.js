@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+
 import {
   createContact,
   deleteContact,
@@ -22,10 +23,6 @@ export const getContactsController = async (req, res) => {
     sortOrder,
     filter,
   });
-
-  if (contacts.status === 400) {
-    return res.status(400).json(contacts);
-  }
 
   res.json({
     status: 200,
