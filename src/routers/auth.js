@@ -18,12 +18,14 @@ router.post(
 );
 
 router.post(
-  'login',
+  '/login',
   validateBody(loginUserSchema),
   ctrlWrapper(loginUserController),
 );
 
-router.post('logout', ctrlWrapper(logoutUserController));
-router.post('refresh', ctrlWrapper(refreshUserSessionController));
+router.post('/refresh', ctrlWrapper(refreshUserSessionController));
+
+router.post('/logout', ctrlWrapper(logoutUserController));
+
 
 export default router;

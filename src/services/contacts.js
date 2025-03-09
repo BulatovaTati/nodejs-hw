@@ -10,11 +10,12 @@ export const getContacts = async ({
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
   filter = {},
+  userId,
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const contactQuery = ContactsCollection.find();
+  const contactQuery = ContactsCollection.find({ userId });
 
   if (filter.isFavourite) {
     contactQuery.where('isFavourite').equals(filter.isFavourite);
@@ -30,9 +31,7 @@ export const getContacts = async ({
 
   const totalPages = Math.ceil(contactCount / perPage);
 
-  if (page > totalPages) {
-    throw createHttpError(400, 'Invalid page number');
-  }
+  if (page > totalPages) throw createHttpError(400, 'Invalid page number');
 
   const contacts = await contactQuery
     .skip(skip)
@@ -48,28 +47,27 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = async (contactId) => {
-  return await ContactsCollection.findById(contactId);
+export const getContactById = async (contactId, userId) => {
+  return await ContactsCollection.findOne({ _id: contactId, userId });
 };
 
 export const createContact = async (payload) => {
   return await ContactsCollection.create(payload);
 };
 
-export const deleteContact = async (contactId) => {
-  return await ContactsCollection.findOneAndDelete({
-    _id: contactId,
-  });
+export const updateContact = async (contactId, payload, userId) => {
+  const { value } = await ContactsCollection.findOneAndUpdate(
+    { _id: contactId, userId },
+    payload,
+    { new: true, includeResultMetadata: true },
+  );
+
+  return value;
 };
 
-export const updateContact = async (contactId, payload) => {
-  const result = await ContactsCollection.findOneAndUpdate(
-    { _id: contactId },
-    payload,
-    {
-      new: true,
-      includeResultMetadata: true,
-    },
-  );
-  return result.value;
+export const deleteContact = async (contactId, userId) => {
+  return await ContactsCollection.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
 };

@@ -7,6 +7,10 @@ const usersSchema = new Schema(
       type: String,
       required: true,
       unique: true,
+      validate: {
+        validator: (v) => /.+@.+\..+/.test(v),
+        message: 'Invalid email format',
+      },
     },
     password: {
       type: String,
