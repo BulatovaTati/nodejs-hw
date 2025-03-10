@@ -25,13 +25,15 @@ export const getContacts = async ({
     contactQuery.where('contactType').equals(filter.contactType);
   }
 
-  const contactCount = await ContactsCollection.find()
+  const contactCount = await ContactsCollection.find({ userId })
     .merge(contactQuery)
     .countDocuments();
 
   const totalPages = Math.ceil(contactCount / perPage);
 
-  if (page > totalPages) throw createHttpError(400, 'Invalid page number');
+  if (page > totalPages && totalPages > 0) {
+    throw createHttpError(400, 'Invalid page number');
+  }
 
   const contacts = await contactQuery
     .skip(skip)
@@ -47,26 +49,26 @@ export const getContacts = async ({
   };
 };
 
-export const getContactById = async (contactId, userId) => {
-  return await ContactsCollection.findOne({ _id: contactId, userId });
+export const getContactById = (contactId, userId) => {
+  return ContactsCollection.findOne({ _id: contactId, userId });
 };
 
-export const createContact = async (payload) => {
-  return await ContactsCollection.create(payload);
+export const createContact = (payload) => {
+  return ContactsCollection.create(payload);
 };
 
 export const updateContact = async (contactId, payload, userId) => {
-  const { value } = await ContactsCollection.findOneAndUpdate(
+  const updatedContact = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
     payload,
     { new: true, includeResultMetadata: true },
   );
 
-  return value;
+  return updatedContact;
 };
 
-export const deleteContact = async (contactId, userId) => {
-  return await ContactsCollection.findOneAndDelete({
+export const deleteContact = (contactId, userId) => {
+  return ContactsCollection.findOneAndDelete({
     _id: contactId,
     userId,
   });
