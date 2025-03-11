@@ -1,16 +1,14 @@
 import { model, Schema } from 'mongoose';
+import { EMAIL_REGEXP } from '../../constants/index.js';
 
 const usersSchema = new Schema(
   {
     name: { type: String, required: true },
     email: {
       type: String,
-      required: true,
       unique: true,
-      validate: {
-        validator: (v) => /.+@.+\..+/.test(v),
-        message: 'Invalid email format',
-      },
+      match: EMAIL_REGEXP,
+      required: true,
     },
     password: {
       type: String,
