@@ -1,17 +1,20 @@
 import path from 'node:path';
 
+// parseSortParams
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
 };
 
+// createSession/auth
 export const FIFTEEN_MINUTES = 15 * 60 * 1000;
-
 export const ONE_DAY = 24 * 60 * 60 * 1000;
 
+// validation
 export const EMAIL_REGEXP =
   /^(?!.*\.\.)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+// sendEmail
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
   SMTP_PORT: 'SMTP_PORT',
@@ -20,4 +23,9 @@ export const SMTP = {
   SMTP_FROM: 'SMTP_FROM',
 };
 
+// resetPassword
 export const TEMPLATES_DIR = path.join(process.cwd(), 'src', 'templates');
+
+//multer
+export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
+export const UPLOAD_DIR = path.join(process.cwd(), 'uploads');
