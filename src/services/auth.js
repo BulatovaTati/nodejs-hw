@@ -127,7 +127,9 @@ export const requestResetToken = async (email) => {
 
     const html = template({
       name: user.name,
-      link: `${getEnvVar('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+      link: `${getEnvVar(
+        'APP_DOMAIN',
+      )}/auth/reset-password?token=${resetToken}`,
     });
 
     await sendEmail({
