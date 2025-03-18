@@ -70,7 +70,12 @@ export const refreshUserSessionController = async (req, res) => {
 };
 
 export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) await logoutUser(req.cookies.sessionId);
+  const { sessionId } = req.cookies;
+
+  if (!sessionId)
+    res.status(401).json({ message: 'User is not authenticated' });
+
+  await logoutUser(sessionId);
 
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
