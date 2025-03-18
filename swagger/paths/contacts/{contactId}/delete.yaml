@@ -14,10 +14,10 @@ parameters:
       example: '67cece57cf044b5afacf7749'
 responses:
   '204':
-  description: No Content
-  401':
+    description: No Content
+  '401':
     $ref: ../../../components/responses/401.yaml
   '404':
-    $ref: ../../../components/responses/404.yaml
+    $ref: '../../../components/responses/404.yaml'
   '500':
-    $ref: ../../../components/responses/500.yaml
+    $ref: '../../../components/responses/500.yaml'
