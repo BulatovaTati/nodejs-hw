@@ -9,6 +9,7 @@ import {
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
+import { UsersCollection } from '../db/models/user.js';
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -45,10 +46,15 @@ export const loginUserController = async (req, res) => {
     expires: new Date(Date.now() + ONE_DAY),
   });
 
+  const user = await UsersCollection.findOne({
+    _id: session.userId,
+  });
+
   res.json({
     status: 200,
     message: 'Successfully logged in an user!',
     data: {
+      name: user.name,
       accessToken: session.accessToken,
     },
   });
@@ -62,12 +68,14 @@ export const refreshUserSessionController = async (req, res) => {
 
   setupSession(res, session);
 
+  const user = await UsersCollection.findOne({
+    _id: session.userId,
+  });
+
   res.json({
     status: 200,
     message: 'Successfully refreshed a session!',
-    data: {
-      accessToken: session.accessToken,
-    },
+    data: { name: user.name, accessToken: session.accessToken },
   });
 };
 
