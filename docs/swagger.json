@@ -657,9 +657,14 @@
                     "data": {
                       "type": "object",
                       "required": [
+                        "name",
                         "accessToken"
                       ],
                       "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
                         "accessToken": {
                           "type": "string",
                           "example": "FZ5lUcIf02vxG4jLikawUhFHm2SwUdX5J4ChyJSZQ2sUJYShhEBPmdKF3EUCHtSx"
@@ -740,9 +745,14 @@
                     "data": {
                       "type": "object",
                       "required": [
+                        "name",
                         "accessToken"
                       ],
                       "properties": {
+                        "name": {
+                          "type": "string",
+                          "example": "John Doe"
+                        },
                         "accessToken": {
                           "type": "string",
                           "example": "FZ5lUcIf02vxG4jLikawUhFHm2SwUdX5J4ChyJSZQ2sUJYShhEBPmdKF3EUCHtSx"
