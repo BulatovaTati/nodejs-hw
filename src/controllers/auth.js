@@ -82,8 +82,9 @@ export const refreshUserSessionController = async (req, res) => {
 export const logoutUserController = async (req, res) => {
   const { sessionId } = req.cookies;
 
-  if (!sessionId)
-    res.status(401).json({ message: 'User is not authenticated' });
+  if (!sessionId) {
+    return res.status(401).json({ message: 'User is not authenticated' });
+  }
 
   await logoutUser(sessionId);
 
