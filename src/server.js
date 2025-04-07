@@ -19,7 +19,7 @@ export const setupServer = async () => {
   app.use(express.json());
   
   const corsOptions = {
-    origin: ['http://localhost:5173', "https://nodejs-hw-nq50.onrender.com"]
+    origin: ['http://localhost:5173', "https://nodejs-hw-nq50.onrender.com"],
     credentials: true,
   };
   app.use(cors(corsOptions));
