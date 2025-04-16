@@ -15,15 +15,15 @@ const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'none', 
-    secure: true
+    sameSite: 'none',
+    secure: true,
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'none', 
-    secure: true
+    sameSite: 'none',
+    secure: true,
   });
 };
 
@@ -43,15 +43,15 @@ export const loginUserController = async (req, res) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'none', 
-    secure: true
+    sameSite: 'none',
+    secure: true,
   });
 
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
-    sameSite: 'none', 
-    secure: true
+    sameSite: 'none',
+    secure: true,
   });
 
   const user = await UsersCollection.findOne({
@@ -99,7 +99,7 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
 
- return res.status(204).send();
+  return res.status(204).send();
 };
 
 export const requestResetEmailController = async (req, res) => {
@@ -135,12 +135,18 @@ export const getGoogleOAuthUrlController = async (req, res) => {
 
 export const loginWithGoogleController = async (req, res) => {
   const session = await loginOrSignupWithGoogle(req.body.code);
+
   setupSession(res, session);
+
+  const user = await UsersCollection.findOne({
+    _id: session.userId,
+  });
 
   res.json({
     status: 200,
     message: 'Successfully logged in via Google OAuth!',
     data: {
+      name: user.name,
       accessToken: session.accessToken,
     },
   });
